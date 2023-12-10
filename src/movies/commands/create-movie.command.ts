@@ -3,7 +3,9 @@
  * under the Open Software License version 3.0.
  */
 
-import { Injectable } from '@nestjs/common';
-
-@Injectable()
-export class UsersService {}
+export class CreateMovieCommand {
+  constructor(
+    public readonly title: string,
+    public readonly year: string,
+  ) {}
+}

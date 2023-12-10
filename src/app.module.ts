@@ -4,14 +4,24 @@
  */
 
 import { Module } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
+import { CqrsModule } from '@nestjs/cqrs';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [MoviesModule, UsersModule],
+  imports: [CqrsModule.forRoot(), MoviesModule, PrismaModule, UsersModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
