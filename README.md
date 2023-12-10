@@ -4,7 +4,7 @@ Backend for an application that lets you track how many times you've watched a m
 
 ## Tasks
 
-- [ ] Add dependencies and code structure
+- [x] Add dependencies and code structure
 - [ ] Add an endpoint to add movies to the database
 - [ ] Add an endpoint to record watching a movie
 - [ ] Add an endpoint to retrieve data about a movie, including how many times it has been watched
