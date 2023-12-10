@@ -25,6 +25,7 @@ export class CreateMovieCommandHandler
       year: command.year,
     };
 
+    // This return value gets used for the response payload
     return movie;
   }
 }
