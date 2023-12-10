@@ -5,6 +5,7 @@
 
 import { Module } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
+import { CqrsModule } from '@nestjs/cqrs';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,7 +14,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [MoviesModule, UsersModule, PrismaModule],
+  imports: [CqrsModule.forRoot(), MoviesModule, PrismaModule, UsersModule],
   controllers: [AppController],
   providers: [
     {
