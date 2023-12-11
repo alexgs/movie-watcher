@@ -25,6 +25,16 @@ export class CreateMovieCommandHandler
       year: command.year,
     };
 
+    // TODO Check for duplicate movies in the database before creating the
+    //   event. It's not immediately obvious how to do this. I think the best
+    //   solution might be to check the projections with the understanding that
+    //   duplicates could still creep in. In a production system, you'd need a
+    //   separate cron process to check for dupes and merge them.
+    // throw new BadRequestException('Movie already exists');
+
+    // TODO Create event
+    // TODO Append event to the event store
+
     // This return value gets used for the response payload
     return movie;
   }
