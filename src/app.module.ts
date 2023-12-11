@@ -12,6 +12,7 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
+import { KnexService } from './knex/knex.service';
 
 @Module({
   imports: [CqrsModule.forRoot(), MoviesModule, PrismaModule, UsersModule],
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
       useClass: ZodValidationPipe,
     },
     AppService,
+    KnexService,
   ],
 })
 export class AppModule {}
