@@ -3,9 +3,11 @@
  * under the Open Software License version 3.0.
  */
 
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateMovieCommand } from './create-movie.command';
 import { Logger } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import * as crypto from 'crypto';
+import { CreateMovieCommand } from './create-movie.command';
+import { EventStoreService } from '../../event-store/event-store.service';
 
 @CommandHandler(CreateMovieCommand)
 export class CreateMovieCommandHandler
@@ -13,7 +15,7 @@ export class CreateMovieCommandHandler
 {
   private readonly logger = new Logger(CreateMovieCommandHandler.name);
 
-  constructor() {}
+  constructor(private readonly eventStoreService: EventStoreService) {}
 
   async execute(command: CreateMovieCommand) {
     this.logger.debug(
@@ -32,8 +34,14 @@ export class CreateMovieCommandHandler
     //   separate cron process to check for dupes and merge them.
     // throw new BadRequestException('Movie already exists');
 
-    // TODO Create event
-    // TODO Append event to the event store
+    const event = await this.eventStoreService.createEvent(
+      crypto.randomUUID(),
+      'stream-types.movie',
+      'event-types.movie-created',
+      movie,
+    );
+
+    await this.eventStoreService.appendEvent(event);
 
     // This return value gets used for the response payload
     return movie;

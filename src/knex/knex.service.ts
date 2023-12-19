@@ -6,13 +6,13 @@ import { KnexOptions } from './knex-options.interface';
 @Injectable()
 export class KnexService {
   private readonly logger: Logger;
-  private knexObject: any;
+  private knexObject: knex.Knex;
   constructor(@Inject(KNEX_OPTIONS) private knexOptions: KnexOptions) {
     this.logger = new Logger('KnexService');
     this.logger.log(`Options: ${JSON.stringify(this.knexOptions)}`);
   }
 
-  getKnex() {
+  getKnex(): knex.Knex {
     if (!this.knexObject) {
       this.knexObject = knex(this.knexOptions);
     }
