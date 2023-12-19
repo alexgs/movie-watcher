@@ -15,5 +15,5 @@ Backend for an application that lets you track how many times you've watched a m
 ### Notes
 
 - I'm just going to keep track of users by arbitrary strings; there will be no authentication or authorization in this app.
-- I will use Flyway to manage the database schema, and I will use Prisma as the ORM.
+- I will use Flyway to manage the database schema, and I will use Knex as the ORM.
 - I will use Zod for validation, instead of Nest's built-in validation.
