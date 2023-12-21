@@ -10,6 +10,20 @@ import { WatchMovieCommand } from './commands/watch-movie.command';
 import { MovieReadModel } from './movie.read-model';
 import { GetMovieByIdQuery } from './queries/get-movie-by-id.query';
 
+interface CreatePayload {
+  title: string;
+  year: string;
+}
+
+interface MovieIdPayload {
+  movieId: string;
+}
+
+interface WatchPayload {
+  movieId: string;
+  username: string;
+}
+
 @Injectable()
 export class MoviesFacade {
   constructor(
@@ -17,21 +31,17 @@ export class MoviesFacade {
     private readonly queryBus: QueryBus,
   ) {}
 
-  create({ title, year }: { title: string; year: string }) {
+  create({ title, year }: CreatePayload) {
     const command = new CreateMovieCommand(title, year);
     return this.commandBus.execute(command);
   }
 
-  async getMovieById({
-    movieId,
-  }: {
-    movieId: string;
-  }): Promise<MovieReadModel> {
+  async getMovieById({ movieId }: MovieIdPayload): Promise<MovieReadModel> {
     const query = new GetMovieByIdQuery(movieId);
     return this.queryBus.execute<GetMovieByIdQuery, MovieReadModel>(query);
   }
 
-  watch({ movieId, username }: { movieId: string; username: string }) {
+  watch({ movieId, username }: WatchPayload) {
     const command = new WatchMovieCommand(movieId, username);
     return this.commandBus.execute(command);
   }
