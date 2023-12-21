@@ -30,6 +30,10 @@ export class WatchMovieCommandHandler
     );
     await this.eventStoreService.appendEvent(event);
 
+    // TODO Ideally, we should listen to the database for the event to be
+    //   written, and only after the database has been updated should we return
+    //   the result.
+
     return { movieId: command.movieId, username: command.username };
   }
 }
