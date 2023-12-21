@@ -3,7 +3,7 @@ import { knex } from 'knex';
 import { ulid } from 'ulidx';
 import { KnexService } from './knex.service';
 import { appendEvent } from './append-event';
-import { Event, StreamRecord } from './interfaces';
+import { EventReadModel, EventWriteModel, StreamRecord } from './interfaces';
 
 @Injectable()
 export class EventStoreService {
@@ -13,7 +13,7 @@ export class EventStoreService {
     this.knex = knexService.getKnex();
   }
 
-  async appendEvent(event: Event) {
+  async appendEvent(event: EventWriteModel) {
     return appendEvent(this.knex, event);
   }
 
@@ -21,8 +21,8 @@ export class EventStoreService {
     streamId: string,
     streamType: string,
     eventType: string,
-    data: object,
-  ): Promise<Event> {
+    data: Record<string, unknown>,
+  ): Promise<EventWriteModel> {
     const streamRecord = await this.knex<StreamRecord>('streams')
       .select()
       .where('id', streamId);
@@ -36,5 +36,12 @@ export class EventStoreService {
       data,
       expectedVersion,
     };
+  }
+
+  async getEventsByStreamId(streamId: string): Promise<EventReadModel[]> {
+    return this.knex<EventReadModel>('events')
+      .select()
+      .where('stream_id', streamId)
+      .orderBy('version', 'asc');
   }
 }

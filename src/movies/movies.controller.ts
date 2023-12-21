@@ -3,7 +3,7 @@
  * under the Open Software License version 3.0.
  */
 
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { WatchMovieDto } from './dto/watch-movie.dto';
 import { MoviesFacade } from './movies.facade';
@@ -18,6 +18,11 @@ export class MoviesController {
       title: createMovieDto.title,
       year: createMovieDto.year,
     });
+  }
+
+  @Get('/:id')
+  async getById(@Param('id') movieId: string) {
+    return this.moviesFacade.getMovieById({ movieId });
   }
 
   @Post('/:id/watch')
