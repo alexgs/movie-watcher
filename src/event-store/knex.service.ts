@@ -23,7 +23,7 @@ export class KnexService {
         port: this.configService.get<number>('DATABASE_PORT'),
         user: this.configService.get<string>('DATABASE_USER'),
       },
-      debug: true,
+      debug: false,
     });
   }
 

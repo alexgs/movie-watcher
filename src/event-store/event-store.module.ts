@@ -6,6 +6,6 @@ import { KnexService } from './knex.service';
 @Module({
   exports: [EventStoreService],
   imports: [],
-  providers: [EventStoreService, KnexService, EventPublisherService],
+  providers: [EventPublisherService, EventStoreService, KnexService],
 })
 export class EventStoreModule {}
