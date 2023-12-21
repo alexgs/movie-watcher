@@ -6,8 +6,9 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import * as crypto from 'crypto';
-import { CreateMovieCommand } from './create-movie.command';
+import { EVENT_TYPES, STREAM_TYPES } from '../constants';
 import { EventStoreService } from '../../event-store/event-store.service';
+import { CreateMovieCommand } from './create-movie.command';
 
 @CommandHandler(CreateMovieCommand)
 export class CreateMovieCommandHandler
@@ -36,8 +37,8 @@ export class CreateMovieCommandHandler
 
     const event = await this.eventStoreService.createEvent(
       crypto.randomUUID(),
-      'stream-types.movie',
-      'event-types.movie-created',
+      STREAM_TYPES.MOVIE,
+      EVENT_TYPES.MOVIE_CREATED,
       movie,
     );
 
