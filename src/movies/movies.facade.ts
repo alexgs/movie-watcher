@@ -6,6 +6,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateMovieCommand } from './commands/create-movie.command';
+import { WatchMovieCommand } from './commands/watch-movie.command';
 
 @Injectable()
 export class MoviesFacade {
@@ -13,6 +14,11 @@ export class MoviesFacade {
 
   create({ title, year }: { title: string; year: string }) {
     const command = new CreateMovieCommand(title, year);
+    return this.commandBus.execute(command);
+  }
+
+  watch({ movieId, username }: { movieId: string; username: string }) {
+    const command = new WatchMovieCommand(movieId, username);
     return this.commandBus.execute(command);
   }
 }

@@ -8,10 +8,15 @@ import { MoviesFacade } from './movies.facade';
 import { MoviesController } from './movies.controller';
 import { CreateMovieCommandHandler } from './commands/create-movie.command-handler';
 import { EventStoreModule } from '../event-store/event-store.module';
+import { WatchMovieCommandHandler } from './commands/watch-movie.command-handler';
 
 @Module({
   controllers: [MoviesController],
   imports: [EventStoreModule],
-  providers: [CreateMovieCommandHandler, MoviesFacade],
+  providers: [
+    CreateMovieCommandHandler,
+    MoviesFacade,
+    WatchMovieCommandHandler,
+  ],
 })
 export class MoviesModule {}
