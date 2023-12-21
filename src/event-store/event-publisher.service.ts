@@ -45,9 +45,7 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
       },
       () => {
         // Callback on initial connect and potential reconnects
-        this.logger.debug(
-          `${EventPublisherService.name} connected to PostgreSQL`,
-        );
+        this.logger.debug('Connected to PostgreSQL');
       },
     );
     this.unsubscribe = subscriptionHandle.unsubscribe;
