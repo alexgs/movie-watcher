@@ -4,9 +4,9 @@
  */
 
 import { Knex } from 'knex';
-import { Event, StreamRecord } from './interfaces';
+import { EventWriteModel, StreamRecord } from './interfaces';
 
-export async function appendEvent(knex: Knex, event: Event) {
+export async function appendEvent(knex: Knex, event: EventWriteModel) {
   await knex.transaction(async (trx) => {
     // Insert into stream table if there is no stream with provided streamId
     let streamRecord = await trx<StreamRecord>('streams')

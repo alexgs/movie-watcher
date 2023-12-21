@@ -4,17 +4,19 @@
  */
 
 import { Module } from '@nestjs/common';
+import { EventStoreModule } from '../event-store/event-store.module';
+import { CreateMovieCommandHandler } from './commands/create-movie.command-handler';
+import { WatchMovieCommandHandler } from './commands/watch-movie.command-handler';
 import { MoviesFacade } from './movies.facade';
 import { MoviesController } from './movies.controller';
-import { CreateMovieCommandHandler } from './commands/create-movie.command-handler';
-import { EventStoreModule } from '../event-store/event-store.module';
-import { WatchMovieCommandHandler } from './commands/watch-movie.command-handler';
+import { GetMovieByIdQueryHandler } from './queries/get-movie-by-id.query-handler';
 
 @Module({
   controllers: [MoviesController],
   imports: [EventStoreModule],
   providers: [
     CreateMovieCommandHandler,
+    GetMovieByIdQueryHandler,
     MoviesFacade,
     WatchMovieCommandHandler,
   ],
