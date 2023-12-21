@@ -1,4 +1,9 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import * as postgres from 'postgres';
@@ -7,6 +12,7 @@ import { EventReadModel } from './interfaces';
 
 @Injectable()
 export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(EventPublisherService.name);
   private unsubscribe: () => void;
 
   constructor(
@@ -30,7 +36,7 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
     const subscriptionHandle = await sql.subscribe(
       'insert:events',
       (row: EventReadModel) => {
-        console.log('Received event', row);
+        this.logger.debug(`Publishing event: ${JSON.stringify(row)}`);
         const event = new MovieWatchedEvent(
           row.stream_id,
           row.data.username as string,
@@ -39,7 +45,9 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
       },
       () => {
         // Callback on initial connect and potential reconnects
-        console.log('<< Connected to Postgres >>');
+        this.logger.debug(
+          `${EventPublisherService.name} connected to PostgreSQL`,
+        );
       },
     );
     this.unsubscribe = subscriptionHandle.unsubscribe;

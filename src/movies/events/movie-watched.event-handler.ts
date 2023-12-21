@@ -3,6 +3,7 @@
  * under the Open Software License version 3.0.
  */
 
+import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { MovieWatchedEvent } from './movie-watched.event';
 
@@ -10,7 +11,9 @@ import { MovieWatchedEvent } from './movie-watched.event';
 export class MovieWatchedEventHandler
   implements IEventHandler<MovieWatchedEvent>
 {
+  private readonly logger = new Logger(MovieWatchedEvent.name);
+
   handle(event: MovieWatchedEvent) {
-    console.log('>>>', event, '<<<');
+    this.logger.debug(`Received event: ${JSON.stringify(event)}`);
   }
 }
