@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { knex } from 'knex';
 import { ulid } from 'ulidx';
-import { KnexService } from '../knex/knex.service';
+import { KnexService } from './knex.service';
 import { appendEvent } from './append-event';
 import { Event, StreamRecord } from './interfaces';
 
