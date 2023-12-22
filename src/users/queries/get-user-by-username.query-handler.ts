@@ -4,6 +4,15 @@ import { KnexService } from '../../projections/knex.service';
 import { UserReadModel } from '../user.read-model';
 import { GetUserByUsernameQuery } from './get-user-by-username.query';
 
+interface QueryRecord {
+  id: number;
+  username: string;
+  movie_id: string;
+  count: number;
+  title: string;
+  year: string;
+}
+
 @QueryHandler(GetUserByUsernameQuery)
 export class GetUserByUsernameQueryHandler
   implements IQueryHandler<GetUserByUsernameQuery, UserReadModel | null>
@@ -15,19 +24,24 @@ export class GetUserByUsernameQueryHandler
   }
 
   async execute(query: GetUserByUsernameQuery): Promise<UserReadModel | null> {
-    const records = await this.knex('movies_watched')
+    const records: QueryRecord[] = await this.knex<QueryRecord>(
+      'movies_watched',
+    )
       .select()
-      .where('username', query.username);
+      .where('username', query.username)
+      .join('movies', 'movies_watched.movie_id', '=', 'movies.id');
+
     if (records.length === 0) {
       return null;
     }
+
     return records.reduce(
-      (acc, record) => {
+      (acc: UserReadModel, record) => {
         acc.username = record.username;
         acc.moviesWatched.push({
           movieId: record.movie_id,
-          title: 'some movie', // TODO We need a separate movies table to join on
-          totalTimesWatched: 0,
+          title: record.title,
+          totalTimesWatched: record.count,
         });
         return acc;
       },
