@@ -4,11 +4,13 @@
  */
 
 import { Module } from '@nestjs/common';
+import { KnexService } from './knex.service';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { MovieToUserProjector } from './events/movie-to-user.projector';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [KnexService, MovieToUserProjector, UsersService],
 })
 export class UsersModule {}

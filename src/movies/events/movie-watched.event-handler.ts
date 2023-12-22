@@ -11,7 +11,7 @@ import { MovieWatchedEvent } from './movie-watched.event';
 export class MovieWatchedEventHandler
   implements IEventHandler<MovieWatchedEvent>
 {
-  private readonly logger = new Logger(MovieWatchedEvent.name);
+  private readonly logger = new Logger(MovieWatchedEventHandler.name);
 
   handle(event: MovieWatchedEvent) {
     this.logger.debug(`Received event: ${JSON.stringify(event)}`);

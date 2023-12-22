@@ -37,6 +37,7 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
       'insert:events',
       (row: EventReadModel) => {
         this.logger.debug(`Publishing event: ${JSON.stringify(row)}`);
+        // TODO This should be replaced with a factory to handle all event types
         const event = new MovieWatchedEvent(
           row.stream_id,
           row.data.username as string,
