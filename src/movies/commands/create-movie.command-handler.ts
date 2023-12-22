@@ -3,20 +3,28 @@
  * under the Open Software License version 3.0.
  */
 
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import * as crypto from 'crypto';
+import { knex } from 'knex';
 import { EVENT_TYPES, STREAM_TYPES } from '../constants';
 import { EventStoreService } from '../../event-store/event-store.service';
+import { KnexService } from '../../projections/knex.service';
 import { CreateMovieCommand } from './create-movie.command';
 
 @CommandHandler(CreateMovieCommand)
 export class CreateMovieCommandHandler
   implements ICommandHandler<CreateMovieCommand>
 {
+  private readonly knex: knex.Knex;
   private readonly logger = new Logger(CreateMovieCommandHandler.name);
 
-  constructor(private readonly eventStoreService: EventStoreService) {}
+  constructor(
+    private readonly eventStoreService: EventStoreService,
+    knexService: KnexService,
+  ) {
+    this.knex = knexService.getKnex();
+  }
 
   async execute(command: CreateMovieCommand) {
     this.logger.debug(
@@ -28,12 +36,18 @@ export class CreateMovieCommandHandler
       year: command.year,
     };
 
-    // TODO Check for duplicate movies in the database before creating the
-    //   event. It's not immediately obvious how to do this. I think the best
-    //   solution might be to check the projections with the understanding that
-    //   duplicates could still creep in. In a production system, you'd need a
-    //   separate cron process to check for dupes and merge them.
-    // throw new BadRequestException('Movie already exists');
+    // Check for duplicate movies in the projection database before creating the
+    //   event. This is done with the understanding that duplicates could still
+    //   creep in. In a production system, you'd need a separate cron process to
+    //   check for dupes and merge them.
+    const existingMovies = await this.knex('movies').select().where({
+      title: movie.title,
+      year: movie.year,
+    });
+    if (existingMovies.length > 0) {
+      this.logger.verbose(`Movie already exists: ${JSON.stringify(movie)}`);
+      throw new BadRequestException('Movie already exists');
+    }
 
     const event = await this.eventStoreService.createEvent(
       crypto.randomUUID(),

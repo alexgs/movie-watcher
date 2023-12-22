@@ -6,8 +6,8 @@
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { knex } from 'knex';
-import { KnexService } from '../knex.service';
 import { MovieWatchedEvent } from '../../movies/events/movie-watched.event';
+import { KnexService } from '../../projections/knex.service';
 
 @EventsHandler(MovieWatchedEvent)
 export class MovieToUserProjector implements IEventHandler<MovieWatchedEvent> {

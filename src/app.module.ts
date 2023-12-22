@@ -12,6 +12,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventStoreModule } from './event-store/event-store.module';
 import { MoviesModule } from './movies/movies.module';
+import { ProjectionsModule } from './projections/projections.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
     CqrsModule.forRoot(),
     EventStoreModule,
     MoviesModule,
+    ProjectionsModule,
     UsersModule,
   ],
   providers: [
