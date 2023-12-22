@@ -7,7 +7,9 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import * as postgres from 'postgres';
+import { EVENT_TYPES } from '../movies/constants';
 import { MovieWatchedEvent } from '../movies/events/movie-watched.event';
+import { MovieCreatedEvent } from '../movies/events/movie-created.event';
 import { EventReadModel } from './interfaces';
 
 @Injectable()
@@ -37,11 +39,7 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
       'insert:events',
       (row: EventReadModel) => {
         this.logger.debug(`Publishing event: ${JSON.stringify(row)}`);
-        // TODO This should be replaced with a factory to handle all event types
-        const event = new MovieWatchedEvent(
-          row.stream_id,
-          row.data.username as string,
-        );
+        const event = this.createEventFromRow(row);
         this.eventBus.publish(event);
       },
       () => {
@@ -50,5 +48,23 @@ export class EventPublisherService implements OnModuleInit, OnModuleDestroy {
       },
     );
     this.unsubscribe = subscriptionHandle.unsubscribe;
+  }
+
+  private createEventFromRow(row: EventReadModel) {
+    switch (row.type) {
+      case EVENT_TYPES.MOVIE_CREATED:
+        return new MovieCreatedEvent(
+          row.stream_id,
+          row.data.title as string,
+          row.data.year as string,
+        );
+      case EVENT_TYPES.MOVIE_WATCHED:
+        return new MovieWatchedEvent(
+          row.stream_id,
+          row.data.username as string,
+        );
+      default:
+        throw new Error(`Unknown event type: ${row.type}`);
+    }
   }
 }
