@@ -10,8 +10,8 @@ Backend for an application that lets you track how many times you've watched a m
 - [x] Add an endpoint to record watching a movie
 - [x] Add an endpoint to retrieve data about a movie, including how many times it has been watched
   - [x] Implement computing the entity state from the event store
-- [ ] Add an endpoint to retrieve data about a user, including how many movies they have watched
-  - [ ] Implement projections
+- [-] Add an endpoint to retrieve data about a user, including how many movies they have watched
+  - [x] Implement projections
 
 ### Notes
 

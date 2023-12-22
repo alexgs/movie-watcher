@@ -4,13 +4,19 @@
  */
 
 import { Module } from '@nestjs/common';
+import { MovieToUserProjector } from './events/movie-to-user.projector';
 import { KnexService } from './knex.service';
+import { GetUserByUsernameQueryHandler } from './queries/get-user-by-username.query-handler';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { MovieToUserProjector } from './events/movie-to-user.projector';
 
 @Module({
   controllers: [UsersController],
-  providers: [KnexService, MovieToUserProjector, UsersService],
+  providers: [
+    GetUserByUsernameQueryHandler,
+    KnexService,
+    MovieToUserProjector,
+    UsersService,
+  ],
 })
 export class UsersModule {}
