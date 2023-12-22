@@ -1,6 +1,7 @@
 services:
   database:
     image: postgres:13-alpine
+    command: "-c 'config_file=/etc/postgresql/postgresql.conf'"
     container_name: database
     restart: unless-stopped
     networks:
@@ -9,6 +10,7 @@ services:
       - "${DATABASE_PORT}:5432"
     volumes:
       - "${DATABASE_HOST_DIRECTORY}:/var/lib/postgresql/data"
+      - ./database/conf/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./database/host:/host
     working_dir: /host
 

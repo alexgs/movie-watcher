@@ -7,6 +7,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { knex } from 'knex';
 
+// This is a duplicate of the KnexService from the Event Store module. It is
+// intended to demonstrate that the projection database could be completely
+// independent of the event store database. It could even be a different
+// database technology, like MongoDB.
+
 @Injectable()
 export class KnexService {
   private knexObject: knex.Knex;
