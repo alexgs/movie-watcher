@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { knex } from 'knex';
-import { GetUserByUsernameQuery } from './get-user-by-username.query';
+import { KnexService } from '../../projections/knex.service';
 import { UserReadModel } from '../user.read-model';
-import { KnexService } from '../knex.service';
+import { GetUserByUsernameQuery } from './get-user-by-username.query';
 
 @QueryHandler(GetUserByUsernameQuery)
 export class GetUserByUsernameQueryHandler
