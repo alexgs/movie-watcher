@@ -30,9 +30,11 @@ export class WatchMovieCommandHandler
     );
     await this.eventStoreService.appendEvent(event);
 
-    // TODO Ideally, we should listen to the database for the event to be
-    //   written, and only after the database has been updated should we return
-    //   the result.
+    // Ideally, we should listen to the database for the event to be written,
+    //   and only after the database has been updated should we return the
+    //   result. However, I'm not sure how to implement that (seems like it
+    //   might require a generator or something, like Redux Sagas), so I'm just
+    //   going to stick with the simple solution.
 
     return { movieId: command.movieId, username: command.username };
   }
